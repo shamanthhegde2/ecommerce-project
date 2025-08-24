@@ -1,12 +1,28 @@
+import axios from "axios"
+import { useState, useEffect } from "react"
 import Header from "../componenets/Header"
-import { products } from "../../starting-code/data/products"
 
 import CheckMarkIcon from "../assets/images/icons/checkmark.png"
 
 import "./HomePage.css"
 
 function HomePage() {
-  
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await axios.get("http://localhost:3000/api/products")
+        const { data, status } = response
+        if (status === 200) {
+          setProducts(data)
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      }
+    }
+    fetchProducts()
+  }, [])
   return (
     <>
       <title>Ecommerce Project</title>
