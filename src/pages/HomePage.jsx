@@ -1,4 +1,4 @@
-import HeaderComponent from "../componenets/HeaderComponent"
+import Header from "../componenets/Header"
 
 import "./HomePage.css"
 
@@ -7,7 +7,7 @@ function HomePage() {
     <>
       <title>Ecommerce Project</title>
 
-      <HeaderComponent />
+      <Header />
 
       <div className="home-page">
         <div className="products-grid">

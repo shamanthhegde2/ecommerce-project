@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import HeaderComponent from "../componenets/HeaderComponent"
+import Header from "../componenets/Header"
 
 import "./OrdersPage.css"
 
@@ -7,7 +7,7 @@ export default function OrdersPage() {
   return (
     <>
       <title>Orders</title>
-      <HeaderComponent />
+      <Header />
 
       <div className="orders-page">
         <div className="page-title">Your Orders</div>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-import HeaderComponent from "../componenets/HeaderComponent"
+import Header from "../componenets/Header"
 
 import "./TrackingPage.css"
 
@@ -8,7 +8,7 @@ export default function TrackingPage() {
   return (
     <>
       <title>Tracking</title>
-      <HeaderComponent />
+      <Header />
 
       <div className="tracking-page">
         <div className="order-tracking">

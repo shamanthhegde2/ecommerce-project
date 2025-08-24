@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 
-import "./HeaderComponenet.css"
+import "./Header.css"
 
-function HeaderComponent() {
+function Header() {
   return (
     <div className="header">
       <div className="left-section">
@@ -35,4 +35,4 @@ function HeaderComponent() {
   )
 }
 
-export default HeaderComponent
+export default Header
