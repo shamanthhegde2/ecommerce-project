@@ -6,9 +6,8 @@ import CheckMarkIcon from "../assets/images/icons/checkmark.png"
 
 import "./HomePage.css"
 
-function HomePage() {
+function HomePage({ cartItems }) {
   const [products, setProducts] = useState([])
-  const [cartItems, setCartItems] = useState([])
 
   useEffect(() => {
     async function fetchProducts() {
@@ -23,19 +22,7 @@ function HomePage() {
       }
     }
 
-    async function fetchCartItems() {
-      try {
-        const response = await axios.get("http://localhost:3000/api/cart-items")
-        const { data, status } = response
-        if (status === 200) {
-          setCartItems(data)
-        }
-      } catch (error) {
-        console.error("Error fetching cart items:", error)
-      }
-    }
     fetchProducts()
-    fetchCartItems()
   }, [])
   return (
     <>

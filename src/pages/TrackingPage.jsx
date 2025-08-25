@@ -4,12 +4,12 @@ import Header from "../componenets/Header"
 
 import "./TrackingPage.css"
 
-export default function TrackingPage() {
+export default function TrackingPage({ cartItems }) {
   return (
     <>
       <title>Tracking</title>
       <link rel="icon" type="image/svg+xml" href="tracking-favicon.png" />
-      <Header />
+      <Header cartItems={cartItems} />
 
       <div className="tracking-page">
         <div className="order-tracking">
