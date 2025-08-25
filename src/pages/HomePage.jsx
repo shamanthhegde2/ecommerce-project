@@ -8,6 +8,7 @@ import "./HomePage.css"
 
 function HomePage() {
   const [products, setProducts] = useState([])
+  const [cartItems, setCartItems] = useState([])
 
   useEffect(() => {
     async function fetchProducts() {
@@ -21,13 +22,26 @@ function HomePage() {
         console.error("Error fetching products:", error)
       }
     }
+
+    async function fetchCartItems() {
+      try {
+        const response = await axios.get("http://localhost:3000/api/cart-items")
+        const { data, status } = response
+        if (status === 200) {
+          setCartItems(data)
+        }
+      } catch (error) {
+        console.error("Error fetching cart items:", error)
+      }
+    }
     fetchProducts()
+    fetchCartItems()
   }, [])
   return (
     <>
       <title>Ecommerce Project</title>
       <link rel="icon" type="image/x-icon" href="home-favicon.png" />
-      <Header />
+      <Header cartItems={cartItems} />
 
       <div className="home-page">
         <div className="products-grid">
