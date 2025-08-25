@@ -1,11 +1,14 @@
 import Header from "../componenets/Header"
 import "./NotFoundPage.css"
 
-function NotFoundPage() {
+function NotFoundPage({ cartItems }) {
   return (
     <>
-      <Header />
-      <div className="not-found"><p>Page Not Found</p><p>404</p></div>
+      <Header cartItems={cartItems} />
+      <div className="not-found">
+        <p>Page Not Found</p>
+        <p>404</p>
+      </div>
     </>
   )
 }
