@@ -1,4 +1,9 @@
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { useState, useEffect, Fragment } from "react"
+import { formatOrderedDate } from "../utils/date"
+import { formatMoney } from "../utils/money"
+
 import Header from "../componenets/Header"
 
 import BuyAgainIcon from "../assets/images/icons/buy-again.png"
@@ -6,6 +11,24 @@ import BuyAgainIcon from "../assets/images/icons/buy-again.png"
 import "./OrdersPage.css"
 
 export default function OrdersPage({ cartItems }) {
+  const [orders, setOrders] = useState([])
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const response = await axios.get("/api/orders?expand=products")
+        const { data, status } = response
+        if (status === 200) {
+          setOrders(data)
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error)
+      }
+    }
+
+    fetchOrders()
+  }, [])
+
   return (
     <>
       <title>Orders</title>
@@ -16,125 +39,63 @@ export default function OrdersPage({ cartItems }) {
         <div className="page-title">Your Orders</div>
 
         <div className="orders-grid">
-          <div className="order-container">
-            <div className="order-header">
-              <div className="order-header-left-section">
-                <div className="order-date">
-                  <div className="order-header-label">Order Placed:</div>
-                  <div>August 12</div>
+          {orders.map(order => (
+            <div key={order.id} className="order-container">
+              <div className="order-header">
+                <div className="order-header-left-section">
+                  <div className="order-date">
+                    <div className="order-header-label">Order Placed:</div>
+                    <div>{formatOrderedDate(order.orderTimeMs)}</div>
+                  </div>
+                  <div className="order-total">
+                    <div className="order-header-label">Total:</div>
+                    <div>{formatMoney(order.totalCostCents)}</div>
+                  </div>
                 </div>
-                <div className="order-total">
-                  <div className="order-header-label">Total:</div>
-                  <div>$35.06</div>
+
+                <div className="order-header-right-section">
+                  <div className="order-header-label">Order ID:</div>
+                  <div>{order.id}</div>
                 </div>
               </div>
 
-              <div className="order-header-right-section">
-                <div className="order-header-label">Order ID:</div>
-                <div>27cba69d-4c3d-4098-b42d-ac7fa62b7664</div>
+              <div className="order-details-grid">
+                {order.products.map(orderedProduct => (
+                  <Fragment key={orderedProduct.productId}>
+                    <div className="product-image-container">
+                      <img src={orderedProduct.product.image} />
+                    </div>
+
+                    <div className="product-details">
+                      <div className="product-name">
+                        {orderedProduct.product.name}
+                      </div>
+                      <div className="product-delivery-date">
+                        Arriving on:{" "}
+                        {formatOrderedDate(
+                          orderedProduct.estimatedDeliveryTimeMs
+                        )}
+                      </div>
+                      <div className="product-quantity">
+                        Quantity: {orderedProduct.quantity}
+                      </div>
+                      <button className="buy-again-button button-primary">
+                        <img className="buy-again-icon" src={BuyAgainIcon} />
+                        <span className="buy-again-message">Add to Cart</span>
+                      </button>
+                    </div>
+                    <div className="product-actions">
+                      <Link to="/tracking">
+                        <button className="track-package-button button-secondary">
+                          Track package
+                        </button>
+                      </Link>
+                    </div>
+                  </Fragment>
+                ))}
               </div>
             </div>
-
-            <div className="order-details-grid">
-              <div className="product-image-container">
-                <img src="images/products/athletic-cotton-socks-6-pairs.jpg" />
-              </div>
-
-              <div className="product-details">
-                <div className="product-name">
-                  Black and Gray Athletic Cotton Socks - 6 Pairs
-                </div>
-                <div className="product-delivery-date">
-                  Arriving on: August 15
-                </div>
-                <div className="product-quantity">Quantity: 1</div>
-                <button className="buy-again-button button-primary">
-                  <img className="buy-again-icon" src={BuyAgainIcon} />
-                  <span className="buy-again-message">Add to Cart</span>
-                </button>
-              </div>
-
-              <div className="product-actions">
-                <Link to="/tracking">
-                  <button className="track-package-button button-secondary">
-                    Track package
-                  </button>
-                </Link>
-              </div>
-
-              <div className="product-image-container">
-                <img src="images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg" />
-              </div>
-
-              <div className="product-details">
-                <div className="product-name">
-                  Adults Plain Cotton T-Shirt - 2 Pack
-                </div>
-                <div className="product-delivery-date">
-                  Arriving on: August 19
-                </div>
-                <div className="product-quantity">Quantity: 2</div>
-                <button className="buy-again-button button-primary">
-                  <img className="buy-again-icon" src={BuyAgainIcon} />
-                  <span className="buy-again-message">Add to Cart</span>
-                </button>
-              </div>
-
-              <div className="product-actions">
-                <Link to="/tracking">
-                  <button className="track-package-button button-secondary">
-                    Track package
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="order-container">
-            <div className="order-header">
-              <div className="order-header-left-section">
-                <div className="order-date">
-                  <div className="order-header-label">Order Placed:</div>
-                  <div>June 10</div>
-                </div>
-                <div className="order-total">
-                  <div className="order-header-label">Total:</div>
-                  <div>$41.90</div>
-                </div>
-              </div>
-
-              <div className="order-header-right-section">
-                <div className="order-header-label">Order ID:</div>
-                <div>b6b6c212-d30e-4d4a-805d-90b52ce6b37d</div>
-              </div>
-            </div>
-
-            <div className="order-details-grid">
-              <div className="product-image-container">
-                <img src="images/products/intermediate-composite-basketball.jpg" />
-              </div>
-
-              <div className="product-details">
-                <div className="product-name">Intermediate Size Basketball</div>
-                <div className="product-delivery-date">
-                  Arriving on: June 17
-                </div>
-                <div className="product-quantity">Quantity: 2</div>
-                <button className="buy-again-button button-primary">
-                  <img className="buy-again-icon" src={BuyAgainIcon} />
-                  <span className="buy-again-message">Add to Cart</span>
-                </button>
-              </div>
-
-              <div className="product-actions">
-                <Link to="/tracking">
-                  <button className="track-package-button button-secondary">
-                    Track package
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>
