@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     async function fetchCartItems() {
       try {
-        const response = await axios.get("http://localhost:3000/api/cart-items")
+        const response = await axios.get("http://localhost:3000/api/cart-items?expand=product")
         const { data, status } = response
         if (status === 200) {
           setCartItems(data)
