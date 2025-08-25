@@ -2,7 +2,6 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import { formatMoney } from "../utils/money"
 
-
 import Header from "../componenets/Header"
 import CheckMarkIcon from "../assets/images/icons/checkmark.png"
 
@@ -14,7 +13,7 @@ function HomePage({ cartItems }) {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await axios.get("http://localhost:3000/api/products")
+        const response = await axios.get("/api/products")
         const { data, status } = response
         if (status === 200) {
           setProducts(data)
