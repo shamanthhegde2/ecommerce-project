@@ -6,7 +6,7 @@ import ProductGrid from "./ProductGrid"
 
 import "./HomePage.css"
 
-function HomePage({ cartItems }) {
+function HomePage({ cartItems, loadCartItems }) {
   const [products, setProducts] = useState([])
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function HomePage({ cartItems }) {
       <Header cartItems={cartItems} />
 
       <div className="home-page">
-        <ProductGrid products={products} />
+        <ProductGrid products={products} loadCartItems={loadCartItems} />
       </div>
     </>
   )

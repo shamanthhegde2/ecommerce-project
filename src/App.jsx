@@ -13,28 +13,36 @@ import "./App.css"
 function App() {
   const [cartItems, setCartItems] = useState([])
 
-  useEffect(() => {
-    async function fetchCartItems() {
-      try {
-        const response = await axios.get("/api/cart-items?expand=product")
-        const { data, status } = response
-        if (status === 200) {
-          setCartItems(data)
-        }
-      } catch (error) {
-        console.error("Error fetching cart items:", error)
+  async function loadCartItems() {
+    try {
+      const response = await axios.get("/api/cart-items?expand=product")
+      const { data, status } = response
+      if (status === 200) {
+        setCartItems(data)
       }
+    } catch (error) {
+      console.error("Error fetching cart items:", error)
     }
+  }
 
-    fetchCartItems()
+  useEffect(() => {
+    loadCartItems()
   }, [])
 
   return (
     <Routes>
-      <Route index element={<HomePage cartItems={cartItems} />} />
+      <Route
+        index
+        element={
+          <HomePage cartItems={cartItems} loadCartItems={loadCartItems} />
+        }
+      />
       <Route path="checkout" element={<CheckoutPage cartItems={cartItems} />} />
       <Route path="orders" element={<OrdersPage cartItems={cartItems} />} />
-      <Route path="tracking/:orderId/:productId" element={<TrackingPage cartItems={cartItems} />} />
+      <Route
+        path="tracking/:orderId/:productId"
+        element={<TrackingPage cartItems={cartItems} />}
+      />
       <Route path="*" element={<NotFoundPage cartItems={cartItems} />} />
     </Routes>
   )
