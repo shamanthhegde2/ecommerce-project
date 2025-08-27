@@ -1,29 +1,19 @@
-import { formatMoney } from "../../utils/money"
-import { formatDeliveryDate } from "../../utils/date"
+import DeliveryOption from "./DeliveryOption"
 
-function DeliveryOptions({ deliveryOptions, cartItem }) {
+function DeliveryOptions({ deliveryOptions, cartItem, loadCartItems }) {
+ 
+
   return (
     <div className="delivery-options">
       <div className="delivery-options-title">Choose a delivery option:</div>
       {deliveryOptions.map(option => (
-        <div className="delivery-option" key={option.id}>
-          <input
-            type="radio"
-            className="delivery-option-input"
-            checked={option.id === cartItem.deliveryOptionId}
-            name={`delivery-option-${cartItem.productId}`}
-          />
-          <div>
-            <div className="delivery-option-date">
-              {formatDeliveryDate(option.estimatedDeliveryTimeMs)}
-            </div>
-            <div className="delivery-option-price">
-              {option.priceCents === 0
-                ? "FREE Shipping"
-                : `${formatMoney(option.priceCents)} - Shipping`}
-            </div>
-          </div>
-        </div>
+        <DeliveryOption
+          key={option.id}
+          option={option}
+          cartItem={cartItem}
+          loadCartItems={loadCartItems}
+  
+        />
       ))}
     </div>
   )

@@ -7,40 +7,39 @@ import PaymentSummary from "./PaymentSummary"
 
 import "./CheckoutPage.css"
 
-export default function CheckoutPage({ cartItems }) {
+export default function CheckoutPage({ cartItems, loadCartItems }) {
   const [deliveryOptions, setDeliveryOptions] = useState([])
   const [paymentSummary, setPaymentSummary] = useState(null)
-
+  async function fetchPaymentSummary() {
+    try {
+      const response = await axios.get("/api/payment-summary")
+      const { data, status } = response
+      if (status === 200) {
+        setPaymentSummary(data)
+      }
+    } catch (error) {
+      console.error("Error fetching payment summary:", error)
+    }
+  }
+  async function fetchDeliveryOptions() {
+    try {
+      const response = await axios.get(
+        "/api/delivery-options?expand=estimatedDeliveryTime"
+      )
+      const { data, status } = response
+      if (status === 200) {
+        setDeliveryOptions(data)
+      }
+    } catch (error) {
+      console.error("Error fetching delivery options:", error)
+    }
+  }
   useEffect(() => {
-    async function fetchDeliveryOptions() {
-      try {
-        const response = await axios.get(
-          "/api/delivery-options?expand=estimatedDeliveryTime"
-        )
-        const { data, status } = response
-        if (status === 200) {
-          setDeliveryOptions(data)
-        }
-      } catch (error) {
-        console.error("Error fetching delivery options:", error)
-      }
-    }
-
-    async function fetchPaymentSummary() {
-      try {
-        const response = await axios.get("/api/payment-summary")
-        const { data, status } = response
-        if (status === 200) {
-          setPaymentSummary(data)
-        }
-      } catch (error) {
-        console.error("Error fetching payment summary:", error)
-      }
-    }
-
     fetchDeliveryOptions()
-    fetchPaymentSummary()
   }, [])
+  useEffect(() => {
+    fetchPaymentSummary()
+  }, [cartItems])
 
   return (
     <>
@@ -56,6 +55,7 @@ export default function CheckoutPage({ cartItems }) {
           <OrderSummary
             cartItems={cartItems}
             deliveryOptions={deliveryOptions}
+            loadCartItems={loadCartItems}
           />
           <PaymentSummary paymentSummary={paymentSummary} />
         </div>
