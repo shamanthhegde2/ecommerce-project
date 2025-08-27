@@ -8,6 +8,8 @@ import CartIcon from "../assets/images/icons/cart-icon.png"
 
 import SearchIcon from "../assets/images/icons/search-icon.png"
 
+import CloseIcon from "../assets/images/icons/xmark-solid-full.svg"
+
 import "./Header.css"
 
 function Header({ cartItems, initialSearchText = "" }) {
@@ -29,14 +31,17 @@ function Header({ cartItems, initialSearchText = "" }) {
       </div>
 
       <div className="middle-section">
-        <input
-          value={searchText}
-          onChange={e => setSearchText(e.target.value)}
-          className="search-bar"
-          type="text"
-          placeholder="Search"
-          onKeyDown={handleSearch}
-        />
+        <div className="search-bar-container">
+          <input
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+            className="search-bar"
+            type="text"
+            placeholder="Search"
+            onKeyDown={handleSearch}
+          />
+          {searchText && <img className="close-icon" src={CloseIcon} onClick={() => setSearchText("")} />}
+        </div>
 
         <button className="search-button">
           <img className="search-icon" src={SearchIcon} />

@@ -67,9 +67,17 @@
   display: flex;
 }
 
+.header .search-bar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .header .search-bar {
   flex: 1;
   width: 0;
+  padding-right: 28px;
   font-size: 16px;
   height: 38px;
   padding-left: 15px;
@@ -94,6 +102,13 @@
   height: 20px;
   margin-left: 0px;
   margin-top: 3px;
+}
+
+.header .close-icon {
+  height: 20px;
+  position: absolute;
+  right: 7px;
+  cursor: pointer;
 }
 
 .header .right-section {
