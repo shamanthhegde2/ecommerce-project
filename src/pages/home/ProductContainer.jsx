@@ -1,20 +1,27 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import axios from "axios"
 import CheckMarkIcon from "../../assets/images/icons/checkmark.png"
 import { formatMoney } from "../../utils/money"
 
 function ProductContainer({ product, loadCartItems }) {
+  const timeOutRef = useRef(null)
+  const addedToCartRef = useRef(null)
   const [quantity, setQuantity] = useState(1)
   function handleSetQuantity(event) {
     setQuantity(Number(event.target.value))
   }
   const handleAddToCart = useCallback(
     async productId => {
+      if (timeOutRef.current) clearTimeout(timeOutRef.current)
       await axios.post("/api/cart-items", {
         productId,
         quantity,
       })
       loadCartItems()
+      addedToCartRef.current.classList.add("visible")
+      timeOutRef.current = setTimeout(() => {
+        addedToCartRef.current.classList.remove("visible")
+      }, 2000)
     },
     [loadCartItems, quantity]
   )
@@ -55,11 +62,10 @@ function ProductContainer({ product, loadCartItems }) {
 
       <div className="product-spacer"></div>
 
-      <div className="added-to-cart">
+      <div className="added-to-cart" ref={addedToCartRef}>
         <img src={CheckMarkIcon} />
         Added
       </div>
-
       <button
         className="add-to-cart-button button-primary"
         onClick={() => handleAddToCart(product.id)}
