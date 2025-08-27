@@ -32,6 +32,12 @@
   align-items: start;
 }
 
+.checkout-page .quantity-input {
+  width: 50px;
+  padding: 4px;
+  border: 1px solid rgb(200, 200, 200);
+}
+
 @media (max-width: 1000px) {
   .checkout-page .main {
     max-width: 500px;
@@ -116,7 +122,7 @@
 }
 
 .checkout-page .product-quantity .link-primary {
-  margin-left: 3px;
+  margin-left: 7px;
 }
 
 @media (max-width: 1000px) {
