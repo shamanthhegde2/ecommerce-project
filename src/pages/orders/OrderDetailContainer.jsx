@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { formatOrderedDate } from "../../utils/date"
 import axios from "axios"
@@ -6,7 +6,7 @@ import BuyAgainIcon from "../../assets/images/icons/buy-again.png"
 import CheckMarkIcon from "../../assets/images/icons/checkmark-white.png"
 
 function OrderDetailContainer({ orderedProduct, order, loadCartItems }) {
-  const timeOutRef = useState(null)
+  const timeOutRef = useRef(null)
   const iconRef = useRef(null)
   const addedSpanRef = useRef(null)
   const handleAddToCart = async product => {
@@ -16,14 +16,29 @@ function OrderDetailContainer({ orderedProduct, order, loadCartItems }) {
       quantity: 1,
     })
     await loadCartItems()
-    iconRef.current.src = CheckMarkIcon
-    addedSpanRef.current.innerText = "Added"
+    if (iconRef.current) {
+      iconRef.current.src = CheckMarkIcon
+    }
+    if (addedSpanRef.current) {
+      addedSpanRef.current.innerText = "Added"
+    }
     const timeOutFunction = () => {
-      iconRef.current.src = BuyAgainIcon
-      addedSpanRef.current.innerText = "Add to Cart"
+      if (iconRef.current) {
+        iconRef.current.src = BuyAgainIcon
+      }
+      if (addedSpanRef.current) {
+        addedSpanRef.current.innerText = "Add to Cart"
+      }
     }
     timeOutRef.current = setTimeout(timeOutFunction, 2000)
   }
+
+  useEffect(() => {
+    return () => {
+      if (timeOutRef.current) clearTimeout(timeOutRef.current)
+    }
+  }, [])
+
   return (
     <>
       <div className="product-image-container">

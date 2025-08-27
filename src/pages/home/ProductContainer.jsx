@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import axios from "axios"
 import CheckMarkIcon from "../../assets/images/icons/checkmark.png"
 import { formatMoney } from "../../utils/money"
@@ -12,19 +12,29 @@ function ProductContainer({ product, loadCartItems }) {
   }
   const handleAddToCart = useCallback(
     async productId => {
-      if (timeOutRef.current) clearTimeout(timeOutRef.current)
       await axios.post("/api/cart-items", {
         productId,
         quantity,
       })
-      loadCartItems()
-      addedToCartRef.current.classList.add("visible")
+      await loadCartItems()
+      if (addedToCartRef.current) {
+        addedToCartRef.current.classList.add("visible")
+      }
       timeOutRef.current = setTimeout(() => {
-        addedToCartRef.current.classList.remove("visible")
+        if (addedToCartRef.current) {
+          addedToCartRef.current.classList.remove("visible")
+        }
       }, 2000)
     },
     [loadCartItems, quantity]
   )
+
+  useEffect(() => {
+    return () => {
+      if (timeOutRef.current) clearTimeout(timeOutRef.current)
+    }
+  }, [])
+
   return (
     <div className="product-container" key={product.id}>
       <div className="product-image-container">
