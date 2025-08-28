@@ -85,6 +85,7 @@ function ProductContainer({ product, loadCartItems }) {
       <button
         className="add-to-cart-button button-primary"
         onClick={() => handleAddToCart(product.id)}
+        data-testid="add-to-cart-button"
       >
         Add to Cart
       </button>
