@@ -9,6 +9,7 @@ vi.mock("axios")
 describe("ProductContainer", () => {
   let product
   let loadCartItems
+  let user
   beforeEach(() => {
     product = {
       id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -22,6 +23,7 @@ describe("ProductContainer", () => {
       keywords: ["socks", "sports", "apparel"],
     }
     loadCartItems = vi.fn()
+    user = userEvent.setup()
     render(<ProductContainer product={product} loadCartItems={loadCartItems} />)
   })
   it("display product details", () => {
@@ -40,12 +42,21 @@ describe("ProductContainer", () => {
     expect(screen.getByText("87")).toBeInTheDocument()
   })
   it("add a product to cart", async () => {
-    const user = userEvent.setup()
     await user.click(screen.getByTestId("add-to-cart-button"))
     expect(axios.post).toHaveBeenCalledWith("/api/cart-items", {
       productId: product.id,
       quantity: 1,
     })
     expect(loadCartItems).toHaveBeenCalled()
+  })
+
+  it("selects a quantity", async () => {
+    await user.selectOptions(screen.getByTestId("product-quantity-select"), "3")
+    expect(screen.getByTestId("product-quantity-select")).toHaveValue("3")
+    await user.click(screen.getByTestId("add-to-cart-button"))
+    expect(axios.post).toHaveBeenCalledWith("/api/cart-items", {
+      productId: product.id,
+      quantity: 3,
+    })
   })
 })

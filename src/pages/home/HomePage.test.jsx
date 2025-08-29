@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import HomePage from "./HomePage"
 import { MemoryRouter } from "react-router-dom"
+import userEvent from "@testing-library/user-event"
 import axios from "axios"
 
 vi.mock("axios")
@@ -52,9 +53,6 @@ describe("HomePage", () => {
   it("renders the HomePage component", async () => {
     const productContainers = await screen.findAllByTestId("product-container")
     expect(productContainers).toHaveLength(2)
-    within(productContainers[0]).getByText(
-      "Black and Gray Athletic Cotton Socks - 6 Pairs"
-    )
     expect(
       within(productContainers[0]).getByText(
         "Black and Gray Athletic Cotton Socks - 6 Pairs"
@@ -63,5 +61,23 @@ describe("HomePage", () => {
     expect(
       within(productContainers[1]).getByText("Intermediate Size Basketball")
     ).toBeInTheDocument()
+  })
+
+  it("checks add to cart button", async () => {
+    const user = userEvent.setup()
+    const productContainers = await screen.findAllByTestId("product-container")
+    await user.selectOptions(within(productContainers[0]).getByTestId("product-quantity-select"), "3")
+    await user.selectOptions(within(productContainers[1]).getByTestId("product-quantity-select"), "2")
+    await user.click(within(productContainers[0]).getByTestId("add-to-cart-button"))
+    await user.click(within(productContainers[1]).getByTestId("add-to-cart-button"))
+    expect(axios.post).toHaveBeenNthCalledWith(1, "/api/cart-items", {
+      productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+      quantity: 3,
+    })
+    expect(axios.post).toHaveBeenNthCalledWith(2, "/api/cart-items", {
+      productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+      quantity: 2,
+    })
+    expect(loadCartItemsMock).toHaveBeenCalledTimes(2)
   })
 })
